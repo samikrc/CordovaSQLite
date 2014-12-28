@@ -17,8 +17,8 @@
 		<engine name="cordova" version=">=3.4.0" />
 	</engines>
 	
-    <js-module src="www/cordovasqlite.js" name="CordovaSQLite">
-        <clobbers target="CordovaSQLite" />
+    <js-module src="www/cordovasqlite.js" name="cordovaSQLite">
+        <clobbers target="cordovaSQLite" />
     </js-module>
 
     <!-- android -->

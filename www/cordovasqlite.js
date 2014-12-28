@@ -1,5 +1,5 @@
 /**
-* @return Object literal singleton instance of SQLiteShell
+* @return Singleton instance of cordovaSQLite object.
 */
 var cordovaSQLite =
 {
@@ -9,13 +9,13 @@ var cordovaSQLite =
     * @param successCallback The callback which will be called when database is opened successfully.
     * @param failureCallback The callback which will be called when database can't be opened.
     */
-    openDatabaseFromSD: function (fullPath, toCreate, successCallback, errorCallback)
+    openDatabase: function (fullPath, toCreate, successCallback, errorCallback)
     {
         cordova.exec(
             successCallback,    // Success callback from the plugin
 		    errorCallback,      // Error callback from the plugin
-		    'CordovaSQLite',   // Tell PhoneGap to run "SQLiteActivity" Plugin
-		    'openDatabaseFromSD', 		// Tell plugin, which action we want to perform
+		    'CordovaSQLite',   	// Tell cordova to run "CordovaSQLite" Plugin
+		    'openDatabase', 	// Tell plugin, which action we want to perform
 		    [fullPath, toCreate ? 1 : 0] 	        // Passing list of args to the plugin
 	    );
     },
@@ -33,7 +33,7 @@ var cordovaSQLite =
         cordova.exec(
 		    successCallback,    // Success callback from the plugin
 		    errorCallback,      // Error callback from the plugin
-		    'CordovaSQLite',   // Tell PhoneGap to run "SQLiteActivity" Plugin
+		    'CordovaSQLite',   	// Tell cordova to run "CordovaSQLite" Plugin
 		    'execQuerySingleResult', 		// Tell plugin, which action we want to perform
 		    [sql, params] 	        // Passing list of args to the plugin
 	    );
@@ -57,7 +57,7 @@ var cordovaSQLite =
 		        successCallback(resultArray);
 		    },    // Success callback from the plugin
 		    errorCallback,      // Error callback from the plugin
-		    'CordovaSQLite',   // Tell PhoneGap to run "SQLiteActivity" Plugin
+		    'CordovaSQLite',   	// Tell cordova to run "CordovaSQLite" Plugin
 		    'execQueryArrayResult', 		// Tell plugin, which action we want to perform
 		    [sql, params] 	        // Passing list of args to the plugin
 	    );
@@ -79,7 +79,7 @@ var cordovaSQLite =
         cordova.exec(
 		    successCallback,    // Success callback from the plugin
 		    errorCallback,      // Error callback from the plugin
-		    'CordovaSQLite',   // Tell PhoneGap to run "SQLiteActivity" Plugin
+		    'CordovaSQLite',   	// Tell cordova to run "CordovaSQLite" Plugin
 		    'execQueryNoResult', 		// Tell plugin, which action we want to perform
 		    [sqlStatements] 	        // Passing list of args to the plugin
 	    );
@@ -93,7 +93,7 @@ var cordovaSQLite =
         PhoneGap.exec(
 	        null,    // Success callback from the plugin
 	        null,      // Error callback from the plugin
-	        'CordovaSQLite',   // Tell PhoneGap to run "SQLiteActivity" Plugin
+	        'CordovaSQLite',   // Tell cordova to run "CordovaSQLite" Plugin
 	        'closeDB', 		// Tell plugin, which action we want to perform
 	        [] 	        // Passing list of args to the plugin
         );

@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.*;
 
 /**
- * This class handles connection with a SQLite database stored on the SD card.
+ * This class handles connection with a SQLite database on the device. The database can be residing on the internal or external storage.
  *
  * @author Samik
  */
@@ -29,13 +29,13 @@ public class CordovaSQLite extends CordovaPlugin
      */
     public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException
     {
-        //Log.d("PhonegapSQLiter", "Plugin called for: " + action);
+        //Log.d("CordovaSQLite", "Plugin called for: " + action);
 
         _callbackContext = callbackContext;
 
-        if (action.equals("openDatabaseFromSD"))
+        if (action.equals("openDatabase"))
         {
-            this.openDatabaseFromSD(args.getString(0), args.getInt(1));
+            this.openDatabase(args.getString(0), args.getInt(1));
             return true;
         }
         else if (action.equals("execQuerySingleResult"))
@@ -67,7 +67,7 @@ public class CordovaSQLite extends CordovaPlugin
      *
      * @param fullDBFilePath
      */
-    private void openDatabaseFromSD (String fullDBFilePath, int toCreate)
+    private void openDatabase (String fullDBFilePath, int toCreate)
     {
         // If database is open, then close it
         if (this.myDb != null)
@@ -114,7 +114,7 @@ public class CordovaSQLite extends CordovaPlugin
      */
     private void execQuerySingleResult (String query, String[] args)
     {
-        //Log.d("PhonegapSQLiter", "Executing query: " + query + " with arg: " + args[0]);
+        //Log.d("CordovaSQLite", "Executing query: " + query + " with arg: " + args[0]);
         try
         {
             String result = null;
@@ -141,9 +141,9 @@ public class CordovaSQLite extends CordovaPlugin
     private void execQueryArrayResult (String query, String[] args)
     {
         /*
-    	Log.d("PhonegapSQLiter", "Executing query: " + query + " with arg: ");
+    	Log.d("CordovaSQLite", "Executing query: " + query + " with arg: ");
     	for (String string : args)
-    		Log.d("PhonegapSQLiter", string);
+    		Log.d("CordovaSQLite", string);
     	*/
 
         try
@@ -176,8 +176,8 @@ public class CordovaSQLite extends CordovaPlugin
                 resultStr = resultStr.substring(0, resultStr.lastIndexOf(","));
             }
             resultStr += "]";
-            //Log.d("PhonegapSQLiter", "Result rowcount=" + cursor.getCount());
-            //Log.d("PhonegapSQLiter", "Result=" + resultStr);
+            //Log.d("CordovaSQLite", "Result rowcount=" + cursor.getCount());
+            //Log.d("CordovaSQLite", "Result=" + resultStr);
             cursor.close();
             // Set up the result object.
             _callbackContext.success(resultStr);
