@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="net.orworks.cordovaplugins.cordovasqlite"
+    version="1.0-dev">
+	
+    <name>CordovaSQLite</name>
+    <description>Cordova SQLite Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,sqlite</keywords>
+    <repo>https://github.com/samikrc/CordovaSQLite.git</repo>
+    <issue>https://github.com/samikrc/CordovaSQLite/issues</issue>
+
+	<engines>
+		<engine name="cordova" version=">=3.4.0" />
+	</engines>
+	
+    <js-module src="www/cordovasqlite.js" name="CordovaSQLite">
+        <clobbers target="CordovaSQLite" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Device" >
+                <param name="android-package" value="net.orworks.cordovaplugins.cordovasqlite.CordovaSQLite"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/CordovaSQLite.java" target-dir="src/net/orworks/cordovaplugins/cordovasqlite" />
+    </platform>
+
+</plugin>
