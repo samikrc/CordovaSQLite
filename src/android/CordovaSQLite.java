@@ -1,4 +1,4 @@
-package net.orworks.cordovaplugins;
+package net.orworks.cordovaplugins.cordovasqlite;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;

@@ -17,15 +17,15 @@
 		<engine name="cordova" version=">=3.4.0" />
 	</engines>
 	
-    <js-module src="www/cordovasqlite.js" name="cdvsqlite">
-        <clobbers target="cdvsqlite" />
+    <js-module src="www/cordovasqlite.js" name="cordovaSQLite">
+        <clobbers target="cordovaSQLite" />
     </js-module>
 
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="Device" >
-                <param name="android-package" value="net.orworks.cordovaplugins.cordovasqlite.CordovaSQLite"/>
+            <feature name="CordovaSQLite" >
+                <param name="android-package" value="net.orworks.cordovaplugins.cordovasqlite.CordovaSQLite" />
             </feature>
         </config-file>
 

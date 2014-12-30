@@ -100,4 +100,6 @@ var cordovaSQLite =
     }
 };
 
+module.exports = cordovaSQLite;
+
 
