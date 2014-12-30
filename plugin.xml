@@ -17,7 +17,7 @@
 		<engine name="cordova" version=">=3.4.0" />
 	</engines>
 	
-    <js-module src="www/cordovaSQLite.js" name="cdvsqlite">
+    <js-module src="www/cordovasqlite.js" name="cdvsqlite">
         <clobbers target="cdvsqlite" />
     </js-module>
 
