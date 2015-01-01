@@ -32,4 +32,14 @@
         <source-file src="src/android/CordovaSQLite.java" target-dir="src/net/orworks/cordovaplugins/cordovasqlite" />
     </platform>
 
+	 <!-- ios -->
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="CordovaSQLite">
+				<param name="ios-package" value="CordovaSQLite"/>
+			</feature>
+		</config-file>
+		<header-file src="src/ios/CordovaSQLite.h" />
+		<source-file src="src/ios/CordovaSQLite.m" />
+	</platform>
 </plugin>
