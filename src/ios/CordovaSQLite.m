@@ -60,7 +60,7 @@
     // Execute query and get results in an array.
     NSArray* result = [self execQuery :query :args :NO];
     // Check result.
-    if((NSString*)[result objectAtIndex:0] == @"SUCCESS")
+    if([(NSString*)[result objectAtIndex:0]  isEqual: @"SUCCESS"])
     {
     	// In this case, we get back one or more arrays.
     	NSString* resultVal = [result objectAtIndex:1];
@@ -94,7 +94,7 @@
     // Execute query and get results in an array.
     NSArray* result = [self execQuery :query :args :YES];
     // Check result.
-    if((NSString*)[result objectAtIndex:0] == @"SUCCESS")
+    if([(NSString*)[result objectAtIndex:0]  isEqual: @"SUCCESS"])
     {
         // Log result string
         //NSLog(@"Result string: %@", (NSString*)[result objectAtIndex:1]);
@@ -168,6 +168,7 @@
 			switch(resultType)
 			{
 				case SQLITE_ROW:
+                {
                     // Start with appending a comma
                     if(rowCounter > 0)
                     {	resultStr = [resultStr stringByAppendingString:@", "];	}
@@ -209,11 +210,14 @@
                     else
                         rowCounter++;
 					break;
-					
-				case SQLITE_DONE:					
+				}
+                    
+				case SQLITE_DONE:
 				default:
+                {
 					keepGoing = NO;
 					break;
+                }
 			}
 		}
 		resultStr = (toReturnArray) ? [resultStr stringByAppendingString:@"]"] : resultStr;
@@ -306,7 +310,6 @@
         sqlite3_close(_myDb);
         _myDb = NULL;
     }
-    [super dealloc];
 }
 
 @end
