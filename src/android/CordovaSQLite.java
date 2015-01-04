@@ -20,14 +20,16 @@ public class CordovaSQLite extends CordovaPlugin
 
     /**
      * Executes the request and returns PluginResult.
+     * Notes: overriding a different execute() method to avoid blocking main thread. This is suggested
+     * in: https://issues.apache.org/jira/browse/CB-7109
      *
      * @param action          The action to execute.
-     * @param args            JSONArry of arguments for the plugin.
+     * @param rawArgs         Raw JSON arguments for the plugin as String.
      * @param callbackContext The callback context used when calling back into JavaScript.
      * @return Returns true to indicate successful axecution (which might have resulted in error),
      * false results in a "MethodNotFound" error.
      */
-    public boolean execute (String action, JSONArray args, CallbackContext callbackContext) throws JSONException
+    public boolean execute (String action, final String rawArgs, CallbackContext callbackContext)
     {
         //Log.d("CordovaSQLite", "Plugin called for: " + action);
 
@@ -35,22 +37,85 @@ public class CordovaSQLite extends CordovaPlugin
 
         if (action.equals("openDatabase"))
         {
-            this.openDatabase(args.getString(0), args.getInt(1));
+            cordova.getThreadPool().execute(
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(rawArgs);
+                            String fullDBPath = jsonArray.getString(0);
+                            boolean toCreate = (jsonArray.getInt(1) != 0);
+                            openDatabase(fullDBPath, toCreate);
+                        }
+                        catch (JSONException ex){}
+                    }
+                }
+            );
             return true;
         }
         else if (action.equals("execQuerySingleResult"))
         {
-            this.execQuerySingleResult(args.getString(0), getStringArray(args.getJSONArray(1)));
+            cordova.getThreadPool().execute(
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(rawArgs);
+                            String query = jsonArray.getString(0);
+                            String[] argList = getStringArray(jsonArray.getJSONArray(1));
+                            execQuerySingleResult(query, argList);
+                        }
+                        catch (JSONException ex){}
+                    }
+                }
+            );
             return true;
         }
         else if (action.equals("execQueryArrayResult"))
         {
-            this.execQueryArrayResult(args.getString(0), getStringArray(args.getJSONArray(1)));
+            cordova.getThreadPool().execute(
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(rawArgs);
+                            String query = jsonArray.getString(0);
+                            String[] argList = getStringArray(jsonArray.getJSONArray(1));
+                            execQueryArrayResult(query, argList);
+                        }
+                        catch (JSONException ex){}
+                    }
+                }
+            );
             return true;
         }
         else if (action.equals("execQueryNoResult"))
         {
-            this.execQueryNoResult(getStringArray(args.getJSONArray(0)));
+            cordova.getThreadPool().execute(
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            JSONArray jsonArray = new JSONArray(rawArgs);
+                            String[] queries = getStringArray(jsonArray);
+                            execQueryNoResult(queries);
+                        }
+                        catch (JSONException ex){}
+                    }
+                }
+            );
             return true;
         }
         else if (action.equals("closeDB"))
@@ -67,7 +132,7 @@ public class CordovaSQLite extends CordovaPlugin
      *
      * @param fullDBFilePath
      */
-    private void openDatabase (String fullDBFilePath, int toCreate)
+    private void openDatabase (String fullDBFilePath, boolean toCreate)
     {
         // If database is open, then close it
         if (this.myDb != null)
@@ -92,10 +157,10 @@ public class CordovaSQLite extends CordovaPlugin
 
         try
         {
-            if (toCreate == 0)
-                myDb = SQLiteDatabase.openDatabase(fullDBFilePath, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
-            else
+            if (toCreate)
                 myDb = SQLiteDatabase.openDatabase(fullDBFilePath, null, SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
+            else
+                myDb = SQLiteDatabase.openDatabase(fullDBFilePath, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.NO_LOCALIZED_COLLATORS);
             _callbackContext.success();
         }
         catch (SQLiteException ex)
