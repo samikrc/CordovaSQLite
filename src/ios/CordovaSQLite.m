@@ -51,30 +51,33 @@
  */
 - (void) execQuerySingleResult: (CDVInvokedUrlCommand*)command
 {
-    CDVPluginResult* pluginResult = nil;
     const char* query = [[command.arguments objectAtIndex:0] UTF8String];
     // Create an array of arguments
     NSMutableArray* args = [NSMutableArray array];
     for(NSObject* obj in [command.arguments objectAtIndex:1])
     {   [args addObject:obj];   }
-    // Execute query and get results in an array.
-    NSArray* result = [self execQuery :query :args :NO];
-    // Check result.
-    if([(NSString*)[result objectAtIndex:0]  isEqual: @"SUCCESS"])
-    {
-    	// In this case, we get back one or more arrays.
-    	NSString* resultVal = [result objectAtIndex:1];
-        // Return with success.
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:resultVal];    	
-	}
-	else
-	{
-        // Return with error.
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[result objectAtIndex:1]];    	
-	}
+    // Now process the query in a background thread.
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
+        // Execute query and get results in an array.
+        NSArray* result = [self execQuery :query :args :NO];
+        // Check result.
+        if([(NSString*)[result objectAtIndex:0]  isEqual: @"SUCCESS"])
+        {
+            // In this case, we get back one or more arrays.
+            NSString* resultVal = [result objectAtIndex:1];
+            // Return with success.
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:resultVal];
+        }
+        else
+        {
+            // Return with error.
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[result objectAtIndex:1]];
+        }
 
-    // Return result.
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        // Return result.
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 
 /**
@@ -85,31 +88,34 @@
  */
 - (void) execQueryArrayResult: (CDVInvokedUrlCommand*)command
 {
-    CDVPluginResult* pluginResult = nil;
     const char* query = [[command.arguments objectAtIndex:0] UTF8String];
     // Create an array of arguments
     NSMutableArray* args = [NSMutableArray array];
     for(NSObject* obj in [command.arguments objectAtIndex:1])
     {   [args addObject:obj];   }
-    // Execute query and get results in an array.
-    NSArray* result = [self execQuery :query :args :YES];
-    // Check result.
-    if([(NSString*)[result objectAtIndex:0]  isEqual: @"SUCCESS"])
-    {
-        // Log result string
-        //NSLog(@"Result string: %@", (NSString*)[result objectAtIndex:1]);
-        // Return with success.
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[result objectAtIndex:1]];    	
-	}
-	else
-	{
-        // Return with error.
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[result objectAtIndex:1]];    	
-	}
-    // Return result.
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    // Now process the query in a background thread.
+    [self.commandDelegate runInBackground:^{
+	    CDVPluginResult* pluginResult = nil;
+	    // Execute query and get results in an array.
+	    NSArray* result = [self execQuery :query :args :YES];
+	    // Check result.
+	    if([(NSString*)[result objectAtIndex:0]  isEqual: @"SUCCESS"])
+	    {
+            // Log result string
+            //NSLog(@"Result string: %@", (NSString*)[result objectAtIndex:1]);
+            // Return with success.
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[result objectAtIndex:1]];
+        }
+        else
+        {
+            // Return with error.
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[result objectAtIndex:1]];
+        }
+        // Return result.
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
-    
+     
 /**
  * Exec a SQLite query.
  * @param query
@@ -243,42 +249,45 @@
  */
 - (void) execQueryNoResult: (CDVInvokedUrlCommand*)command
 {
-    CDVPluginResult* pluginResult = nil;
-    // Execute an array of queries
-	sqlite3_stmt *statement;
-	NSString* errMessage = nil;
-    for(NSObject* obj in [command.arguments objectAtIndex:0])
-    {
-    	const char* query = [(NSString*)obj UTF8String];
-        if(sqlite3_prepare_v2(_myDb, query, -1, &statement, NULL) == SQLITE_OK)
-    	{
-    		// Execute the statement.
-			int resultType = sqlite3_step (statement);
-			if(resultType == SQLITE_ERROR)
-			{	
-				errMessage = [NSString stringWithUTF8String:(char *) sqlite3_errmsg (_myDb)];
-				break;	
-			}
-			else
-			{	sqlite3_finalize(statement);	}
-		}
-    	else
-    	{
-    		errMessage = [NSString stringWithUTF8String:(char *) sqlite3_errmsg (_myDb)];
-			break;    	
-		}
-	}
-	// Set up plugin result.
-	if(errMessage == nil)
-	{
-		pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
-	}
-	else
-	{
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMessage];
-    }
-    // Return result.
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    // Now process the query in a background thread.
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
+        // Execute an array of queries
+        sqlite3_stmt *statement;
+        NSString* errMessage = nil;
+        for(NSObject* obj in [command.arguments objectAtIndex:0])
+        {
+            const char* query = [(NSString*)obj UTF8String];
+            if(sqlite3_prepare_v2(_myDb, query, -1, &statement, NULL) == SQLITE_OK)
+            {
+                // Execute the statement.
+                int resultType = sqlite3_step (statement);
+                if(resultType == SQLITE_ERROR)
+                {
+                    errMessage = [NSString stringWithUTF8String:(char *) sqlite3_errmsg (_myDb)];
+                    break;
+                }
+                else
+                {	sqlite3_finalize(statement);	}
+            }
+            else
+            {
+                errMessage = [NSString stringWithUTF8String:(char *) sqlite3_errmsg (_myDb)];
+                break;
+            }
+        }
+        // Set up plugin result.
+        if(errMessage == nil)
+        {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+        }
+        else
+        {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMessage];
+        }
+        // Return result.
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 
 /**
