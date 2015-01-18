@@ -32,6 +32,7 @@ There is one prerequisites to running the plugin in a browser environment. For F
 
 The databases will be available at the following locations: 
 - Windows 7: %appdata%\Mozilla\Firefox\Profiles\xxxxxxxx.default\databases\file__
+  - xxxxxxxx is the alpha-numeric key of the profile you are using in FF.
 
 In order to use database in the browser for testing your app, follow one of the strategies below:
 - Create a database file in the location (mentioned above), with the required data. The file must have '.sqlite' extension. Then configure the app and specify only the filename before extension as the 'database full path'.
