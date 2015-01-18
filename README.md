@@ -21,3 +21,18 @@ For iOS platform, after you add the plugin, you will also have to add "libsqlite
 - Click on the project name on the left pane in XCode. That would load the project configurations.
 - Click on the 'Build Phases' tab. Next select 'Link Binary With Libraries'
 - Click the '+' icon to add a library. In the dialog box that appears, search for sqlite and select "libsqlite3.0.dylib".
+
+### browser
+
+One of the important aspect of developing apps with Cordova is that one should be able to test out the app completely from a browser environment, without having to build for a platform everytime. Unfortunately, many plugins lack the components for browser. This plugin can be tested out in a compatible browser environment. I have tested on Firefox (v34.0.5), but Chrome browser should work as well.
+
+There is one prerequisites to running the plugin in a browser environment. For FF:
+- Install the "HTML5 WebSQL for Firefox" plugin v0.6. Can be found at: https://github.com/Sean-Der/WebSQL-For-FireFox
+- Restart the browser.
+
+The databases will be available at the following locations: 
+- Windows 7: %appdata%\Mozilla\Firefox\Profiles\xxxxxxxx.default\databases\file__
+
+In order to use database in the browser for testing your app, follow one of the strategies below:
+- Create a database file in the location (mentioned above), with the required data. The file must have '.sqlite' extension. Then configure the app and specify only the filename before extension as the 'database full path'.
+- You can create the database from your app (and let the app show an error message the first time). Then browse to the folder and populate the database using command line tools before using it the next time.
