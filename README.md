@@ -6,7 +6,7 @@ A custom plugin for accessing SQLite databases through Cordova. The plugin API i
 ## Installation
 
 Use cordova CLI to install the plugin:
-> cordova plugin add net.orworks.cordovaplugins.cordovasqlite 
+> cordova plugin add net.orworks.cordovaplugins.cordovasqlite <br />
 > OR, cordova plugin add https://github.com/samikrc/CordovaSQLite.git
 
 ## Uninstallation
@@ -27,7 +27,7 @@ For iOS platform, after you add the plugin, you will also have to add "libsqlite
 
 One of the important aspect of developing apps with Cordova is that one should be able to test out the app completely from a browser environment, without having to build for a platform everytime. Unfortunately, many plugins lack the components for browser. This plugin can be tested out in a compatible browser environment. I have tested on Firefox (v34.0.5), but Chrome browser should work as well.
 
-There is prerequisites to running the plugin in a browser environment. For FF:
+There are prerequisites to running the plugin in a browser environment. For FF:
 - Install the "HTML5 WebSQL for Firefox" plugin v0.6. Can be found at: https://github.com/Sean-Der/WebSQL-For-FireFox
   - Restart the browser.
 - Also, if you are using this plugin to interact with a SQLite file, you would presumably need the File plugin as well. Unfortunately, File plugin is not available for browser. You have to roll out your own version for the browser by looking at the existing plugins.
