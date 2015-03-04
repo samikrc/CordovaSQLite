@@ -6,13 +6,17 @@ A custom plugin for accessing SQLite databases through Cordova. The plugin API i
 ## Installation
 
 Use cordova CLI to install the plugin:
-> cordova plugin add net.orworks.cordovaplugins.cordovasqlite <br />
+<pre>
+> cordova plugin add net.orworks.cordovaplugins.cordovasqlite
 > OR, cordova plugin add https://github.com/samikrc/CordovaSQLite.git
+</pre>
 
 ## Uninstallation
 
 Use cordova CLI to uninstall the plugin:
+<pre>
 > cordova plugin rm net.orworks.cordovaplugins.cordovasqlite
+</pre>
 
 ## API
 
