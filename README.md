@@ -14,6 +14,59 @@ Use cordova CLI to install the plugin:
 Use cordova CLI to uninstall the plugin:
 > cordova plugin rm net.orworks.cordovaplugins.cordovasqlite
 
+## API
+
+The API contains the following functions:
+- openDatabase(fullPath, toCreate, successCallback, errorCallback): Method to open a database.
+  - fullPath: Full path to the database file.
+  - toCreate: Whether to create the database if it does not exist.
+  - successCallback
+  - errorCallback
+- execQuerySingleResult(sql, params, successCallback, errorCallback): Executes a query and returns a single string. Note: number is returned as string and have to eval()-ed before using.
+  - sql: SQL string.
+  - params: An array of parameters, to be used for binding with the SQL string.
+  - successCallback
+  - errorCallback
+- execQueryArrayResult(sql, params, successCallback, errorCallback): Executes a query and returns a 2D javascript array. Rows are records and columns are data cols. Note: number is returned as string and have to eval()-ed before using.
+  - sql: SQL string.
+  - params: An array of parameters, to be used for binding with the SQL string.
+  - successCallback
+  - errorCallback
+- execQueryNoResult(sqlStatements, successCallback, errorCallback): Executes a bunch of queries, which doesn't return any result.
+  - sqlStatements: Array containing sql statements. No provision for providing binding parameters here, so parameters have to be embedded in the query string itself.
+  - successCallback
+  - errorCallback
+- closeDB(): Closes a database connection safely.
+
+## Sample Code
+
+The following code assumes an existing database file. Creating a new database file with some data would work the same way. 
+
+<pre>
+window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory,
+function (confDir)
+{
+	console.log("Got directory: " + confDir.fullPath);
+	var dbFullPath = cordova.file.externalDataDirectory + "2014110801.sqlite";
+	confDir.getFile("2014110801.sqlite", { create: false },
+	function (confFile)
+	{
+		console.log("Got file: " + confFile.fullPath);
+		cordovaSQLite.openDatabase(dbFullPath, false,
+		function ()
+		{
+			cordovaSQLite.execQueryArrayResult("select value from info where name=?", ["Conference"],
+			function (confName)
+			{   console.log("Got conference name: " + confName);   },
+			function (error) { alert("##execQueryArrayResult: " + error); });
+		 },
+		 function (error) { alert("##openDatabase: " + error); });
+	},
+	function (error) { alert("##getFile: " + error); });
+}, // Success callback [resolveLocalFileSystemURL]
+function (error) { alert(error); }); // Failure callback [resolveLocalFileSystemURL]
+</pre>
+
 ## Platform Notes
 
 ### iOS
