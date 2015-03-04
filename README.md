@@ -33,7 +33,7 @@ The API contains the following functions:
   - successCallback
   - errorCallback
 - execQueryNoResult(sqlStatements, successCallback, errorCallback): Executes a bunch of queries, which doesn't return any result.
-  - sqlStatements: Array containing sql statements. No provision for providing binding parameters here, so parameters have to be embedded in the query string itself.
+  - sqlStatements: Array containing sql statements like INSERT, UPDATE, DELETE. No provision for providing binding parameters here, so parameters have to be embedded in the query string itself, if required.
   - successCallback
   - errorCallback
 - closeDB(): Closes a database connection safely.
