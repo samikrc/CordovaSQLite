@@ -82,9 +82,13 @@ For iOS platform, after you add the plugin, you will also have to add "libsqlite
 
 ### browser
 
-One of the important aspect of developing apps with Cordova is that one should be able to test out the app completely from a browser environment, without having to build for a platform everytime. Unfortunately, many plugins lack the components for browser. This plugin can be tested out in a compatible browser environment. I have tested on Firefox (v34.0.5), but Chrome browser should work as well.
+<span style="color: red">[Update] The implementation is now broken on Firefox browsers (from v36.0 onwards). From my research, it seems like FF has changed some of their add-on interface, which is resulting in the addon mentioned below ("HTML5 WebSQL for Firefox" plugin v0.6) to not work any more.</span>
 
-There are prerequisites to running the plugin in a browser environment. For FF:
+One of the important aspect of developing apps with Cordova is that one should be able to test out the app completely from a browser environment, without having to build for a platform everytime. Unfortunately, many plugins lack the components for browser. This plugin can be tested out in a compatible browser environment. This is tested on Firefox (v34.0.5) and on Chrome (Version 42.0.2311.152 m).
+
+There are prerequisites to running the plugin in a browser environment.
+
+#### Firefox
 - Install the "HTML5 WebSQL for Firefox" plugin v0.6. Can be found at: https://github.com/Sean-Der/WebSQL-For-FireFox
   - Restart the browser.
 - Also, if you are using this plugin to interact with a SQLite file, you would presumably need the File plugin as well. Unfortunately, File plugin is not available for browser. You have to roll out your own version for the browser by looking at the existing plugins.
@@ -96,3 +100,25 @@ The databases will be available at the following locations:
 In order to use database in the browser for testing your app, follow one of the strategies below:
 - Create a database file in the location (mentioned above), with the required data. The file must have '.sqlite' extension. Then configure the app and specify only the filename before extension as the 'database full path'.
 - You can create the database from your app (and let the app show an error message the first time). Then browse to the folder and populate the database using command line tools before using it the next time.
+
+#### Chrome
+- No plugin to install - Chrome supports using SQLite out of the box.
+- The comment about File plugin holds for Chrome browsers as well (see the section for FF).
+
+The database will be available at the following location:
+- Windows 7: C:\Users\[UserName]\AppData\Local\Google\Chrome\User Data\Default\databases\file__0
+  - The database file names would be just numbers, e.g., 1, 2, 3, etc.
+
+In order to use database in the browser for testing your app, do as follows:
+- You can create the database from your app (and let the app show an error message the first time). 
+- Then browse to the folder mentioned above and locate the database.
+  - In order to locate the correct database, you can query the "Databases.db" file at the parent folder. E.g. 
+<pre>
+$ sqlite3.exe Databases.db -header "select * from Databases"
+id|origin|name|description|estimated_size
+1|file__0|2014110801|Session DB|2097152
+2|file__0|/2014110801.sqlite|Session DB|2097152
+3|http_playground.html5rocks.com_0|Todo|Todo manager|5242880
+4|file__0|smscollection|Session DB|2097152
+</pre>
+- Populate the database using command line tools before using it the next time.
