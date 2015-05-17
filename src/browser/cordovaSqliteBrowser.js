@@ -4,6 +4,7 @@
  * Notes: 
  * - All the methods in this file are to be written as fn(successCallback, errorCallback, args),
  *   where 'successCallback', 'errorCallback' are functions and 'args' is an array of arguments.
+ * - This should work in Chrome database as well, as it natively supports querying SQLite database.
  */
 
 module.exports = 
@@ -74,8 +75,8 @@ module.exports =
                 if (results.rows.length > 0)
                 {
                     // Get the set of columns.
-                    var cols = Object.keys(results.rows[0]);
-                    result = results.rows[0][cols[0]];
+                    var cols = Object.keys(results.rows.item(0));
+                    result = results.rows.item(0)[cols[0]];
                     console.log("For query: " + sql + ", parms: " + params.toString() + ", result: " + result);
                 }
                 // Now call the success callback.
@@ -111,13 +112,13 @@ module.exports =
                 {
                     console.log("For query: " + sql + ", parms: " + params.toString() + ", result length = " + results.rows.length);
                     // Get the set of columns.
-                    var cols = Object.keys(results.rows[0]);
+                    var cols = Object.keys(results.rows.item(0));
                     // Now go through result rows
                     for (var i = 0; i < results.rows.length; i++)
                     {
                         var row = [];
                         cols.forEach(function (col)
-                        { row.push(results.rows[i][col]); });
+                        { row.push(results.rows.item(i)[col]); });
                         resultSet.push(row);
                     }
                 }
