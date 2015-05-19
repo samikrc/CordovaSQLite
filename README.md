@@ -82,7 +82,13 @@ For iOS platform, after you add the plugin, you will also have to add "libsqlite
 
 ### browser
 
-<span style="color: red">[Update] The implementation is now broken on Firefox browsers (from v36.0 onwards). From my research, it seems like FF has changed some of their add-on interface, which is resulting in the addon mentioned below ("HTML5 WebSQL for Firefox" plugin v0.6) to not work any more.</span>
+<pre>
+----------------------------------------
+[Update] The implementation is now broken on Firefox browsers (from v36.0 onwards). From my research, 
+it seems like FF has changed some of their add-on interface, which is resulting in the addon mentioned 
+below ("HTML5 WebSQL for Firefox" plugin v0.6) to not work any more.
+-----------------------------------------
+</pre>
 
 One of the important aspect of developing apps with Cordova is that one should be able to test out the app completely from a browser environment, without having to build for a platform everytime. Unfortunately, many plugins lack the components for browser. This plugin can be tested out in a compatible browser environment. This is tested on Firefox (v34.0.5) and on Chrome (Version 42.0.2311.152 m).
 
@@ -121,4 +127,4 @@ id|origin|name|description|estimated_size
 3|http_playground.html5rocks.com_0|Todo|Todo manager|5242880
 4|file__0|smscollection|Session DB|2097152
 </pre>
-- Populate the database using command line tools before using it the next time.
+- Populate the database using command line tools before using it the next time. Alternatively, you can copy over a prepared database and rename it to what the expected number would be.
