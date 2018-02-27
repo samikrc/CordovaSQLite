@@ -19,7 +19,7 @@
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios",
-    "cordova-browser",
+    "cordova-browser"
   ],
   "bugs": {
     "url": "https://github.com/samikrc/CordovaSQLite/issues"
