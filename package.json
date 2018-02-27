@@ -1,0 +1,30 @@
+{
+  "name": "cordovasqlite",
+  "version": "1.0.0",
+  "description": "A custom plugin for accessing SQLite databases through Cordova.",
+  "cordova": {
+    "id": "cordovasqlite",
+    "platforms": [
+      "android",
+      "ios",
+      "browser"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/samikrc/CordovaSQLite.git"
+  },
+  "keywords": [
+    "sqlite",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-browser",
+  ],
+  "bugs": {
+    "url": "https://github.com/samikrc/CordovaSQLite/issues"
+  },
+  "homepage": "https://github.com/samikrc/CordovaSQLite",
+  "author": "samikrc",
+  "license": "Apache License 2.0"
+}
